@@ -1,60 +1,82 @@
 "use strict";
-var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-var points = 0;
-var attemptsLeft = 9;
+var score = 0;
 var losses = 0;
-var debug = false;
+var attempts = 9;
+var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+var secretLetterGenerated = " ";
+var gameReset = true;
+var guessedLetters = " ";
+var guess = " ";
 
-let secretLetterGenerated = "";
-let random;
+document.getElementById("Score").innerHTML = score;
+document.getElementById("Losses").innerHTML = losses;
+// The code below generates the random letter
+// random = Math.floor(Math.random() * 26);
+// secretLetterGenerated = letters[random];
+// console.log("The secret letter is " + secretLetterGenerated);
 
 
-
-random = Math.floor(Math.random() * 26);
+var random = Math.floor(Math.random() * 26);
 secretLetterGenerated = letters[random];
-if (debug === true) { console.log("The Secret letter is " + secretLetterGenerated); }
-document.getElementById("demo").innerHTML = "You have " + losses + " losses and the score is " + points + " points";
-// Making the loop for attempt to go down
+console.log("The secret letter is " + secretLetterGenerated);
+
+// The onclick event begins with the function below. In other words, once the user clicks the continue button, the whole function does its task.
 function myFunction() {
 
+
+  // The for loop starts in the code below
   for (var i = 1; i < 10; i++) {
-    var guess = prompt("Guess a letter. You have this " + attemptsLeft + " attempts left");
-    if (debug === true) { console.log("You guessed " + guess); }
+
+    // This is where the user gets asked about the secret letter.
+    guess = prompt("Guess the right letter. You have " + attempts + " attempts left." + " Letters you guessed: " + guessedLetters);
+    guessedLetters = guessedLetters + guess;
+    document.getElementById("lettersGuessed").innerHTML = "Your guesses so far: " + guessedLetters;
+
+
+    // The Condition if the user gets the word right:
     if (guess === secretLetterGenerated) {
-      alert("You guessed it right!");
-      points++;
-      document.getElementById("demo").innerHTML = "You have " + losses + " losses and " + points + " points";
-      if (debug === true) { console.log("User Wins") }
-      var score = points;
-      document.getElementById("score").innerHTML = "Score: " + score;
-      console.log("My Points: " + points);
-      random = Math.floor(Math.random() * 26);
+      alert("You Win");
+      console.log("You Win!");
+      console.log(score);
+      score++;
+      attempts = 9;
+      gameReset = false;
+      document.getElementById("Score").innerHTML = score;
+      guessedLetters = " ";
+      var random = Math.floor(Math.random() * 26);
       secretLetterGenerated = letters[random];
-      if (debug === true) { console.log("The Secret letter is " + secretLetterGenerated); }
-      if (points === 9) {
-        alert("You Win the Game! The game has been restarted to 0 points.");
-        points = 0;
-        score = points;
-        break;
-        if (debug === true) { console.log("User wins and points need to go back to 0"); }
-      }
+      console.log("The secret letter is " + secretLetterGenerated);
       break;
-    } else {
-      attemptsLeft--;
-      if (debug === true) { console.log("Attempt went down by 1, the losses are " + losses); }
-      if (attemptsLeft === 0) {
+    }
+
+
+    // The code below is for if the user gets one guess wrong.
+    else {
+      attempts--;
+      console.log("try again");
+
+      // The next part is the condition if the user uses up all the attempts they have:
+      if (attempts === 0) {
         losses++;
-        alert("You lost this round.")
-        document.getElementById("tryAgain").innerHTML = "Please try again";
-        attemptsLeft = 9;
-        document.getElementById("demo").innerHTML = "You have " + losses + " losses and " + points + " points";
-        document.getElementById("losses").innerHTML = "Losses: " + losses;
-        if (debug === true) { console.log("Losses go up by 1, and attempts are back to 9", attemptsLeft, losses); }
+        alert("You lose this round!");
+        console.log("You lose");
+        console.log(losses);
+        attempts = 9;
+        document.getElementById("Losses").innerHTML = losses;
+        // If statement for if you get 9 losses
+        if (losses === 9) {
+          console.log("Game Over");
+          alert("Game Over. Try again.")
+          score = 0;
+          losses = " ";
+        }
+        break;
+
       }
+
     }
   }
 }
-if (debug === true) { console.log("losses" + losses); }
 
 
 
